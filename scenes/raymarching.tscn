@@ -5,12 +5,16 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7ha7r"]
 shader = ExtResource("1_g5vds")
-shader_parameter/res = null
+shader_parameter/res = Vector2(1150, 646)
+shader_parameter/origin = Vector3(0, 0, -3)
+shader_parameter/rotation = null
+shader_parameter/down = Vector3(0, 1, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_wmn2d"]
 
 [node name="Raymarching" type="MeshInstance2D"]
 material = SubResource("ShaderMaterial_7ha7r")
-scale = Vector2(320, 180)
+position = Vector2(-134, 180)
+scale = Vector2(2937, 1439)
 mesh = SubResource("QuadMesh_wmn2d")
 script = ExtResource("2_s3meg")
