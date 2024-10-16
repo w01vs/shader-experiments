@@ -1,53 +1,34 @@
 extends MeshInstance2D
 
-var pos: Vector3 = Vector3(0,0,-3)
-var deg_dir: Vector2 = Vector2(0, 0)
-var speed: float = 0.02
+var zoom: int = 0
+var mouse: Vector2
 
 func _ready() -> void:
 	update_quad_scale()
 	get_viewport().connect("size_changed", update_quad_scale)
 	material.set_shader_parameter("res", get_viewport().size)
-	material.set_shader_parameter("origin", pos)
+	var size = get_viewport().size
+	mouse = Vector2(size.x / 2, size.y / 2)
+	material.set_shader_parameter("mouse", mouse)
 
-func _physics_process(_delta: float) -> void:
-	if Input.is_action_pressed("forward"):
-		pos.z += speed
+func _physics_process(delta: float) -> void:
+	material.set_shader_parameter("DELTATIME", delta)
+	if Input.is_action_pressed("click"):
+		mouse = get_viewport().get_mouse_position()
+		material.set_shader_parameter("mouse", Vector3(mouse.x, mouse.y, 1))
+	else:
+		material.set_shader_parameter("mouse", Vector3(mouse.x, mouse.y, -1))
 		
-	if Input.is_action_pressed("backward"):
-		pos.z -= speed
-		
-	if Input.is_action_pressed("right"):
-		pos.x += speed
-	
-	if Input.is_action_pressed("left"):
-		pos.x -= speed
-		
-	material.set_shader_parameter("origin", pos)
-
-func _unhandled_input(event)-> void:
-	
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		deg_dir += event.relative / 30
-		if deg_dir.x > 80:
-			deg_dir.x = 80
-		if deg_dir.y > 80:
-			deg_dir.y = 80
-		material.set_shader_parameter("rotation", deg_dir)
-		
-	if event is InputEventMouseButton:
-		if event.button_index == 1:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
-		return
-	
-	if event is InputEventKey:
-		if event.is_action_pressed("ui_cancel"):
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if Input.is_action_just_released("scroll_up"):
+		zoom += 1
+		material.set_shader_parameter("zoom", zoom)
+	if Input.is_action_just_released("scroll_down"):
+		zoom -= 1
+		material.set_shader_parameter("zoom", zoom)
 
 func update_quad_scale() -> void:
 	var viewport_size = get_viewport().size
 	
-	position = Vector2(viewport_size.x / 2, viewport_size.y /2)
+	position = Vector2(viewport_size.x / 2, viewport_size.y / 2)
 
 	scale = Vector2(viewport_size.x, viewport_size.y)
