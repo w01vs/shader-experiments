@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://dnqtbj764op2p"]
+
+[ext_resource type="Shader" path="res://raymarching.gdshader" id="1_ows7u"]
+[ext_resource type="Script" path="res://raymarching.gd" id="2_8inot"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ha7r"]
+shader = ExtResource("1_ows7u")
+shader_parameter/res = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_wmn2d"]
+
+[node name="Raymarching" type="MeshInstance2D"]
+material = SubResource("ShaderMaterial_7ha7r")
+scale = Vector2(320, 180)
+mesh = SubResource("QuadMesh_wmn2d")
+script = ExtResource("2_8inot")
